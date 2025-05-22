@@ -9,7 +9,7 @@ public class Receipt implements  Serializable{
     private int receiptNumber;
     private  Cashier cashier;
     private LocalDateTime timeStamp;
-    private Map<Product, Integer> purchasedProducts;
+    private Map<Product, PurchaseInfo> purchasedProducts;
     private double total;
 
     public Receipt(int receiptNumber, Cashier cashier) {
@@ -19,10 +19,11 @@ public class Receipt implements  Serializable{
         this.purchasedProducts = new LinkedHashMap<>();
         this.total = 0.0;
     }
-    public void addProduct(Product product,int quantity, double unitPrice){
-        purchasedProducts.put(product, quantity);
+    public void addProduct(Product product, int quantity, double unitPrice) {
+        purchasedProducts.put(product, new PurchaseInfo(quantity, unitPrice));
         total += unitPrice * quantity;
     }
+
 
     public int getReceiptNumber() {
         return receiptNumber;
@@ -36,7 +37,7 @@ public class Receipt implements  Serializable{
         return timeStamp;
     }
 
-    public Map<Product, Integer> getPurchasedProducts() {
+    public Map<Product, PurchaseInfo> getPurchasedProducts() {
         return purchasedProducts;
     }
 
@@ -44,20 +45,38 @@ public class Receipt implements  Serializable{
         return Math.round(total*100.0)/ 100.0;
     }
 
-    public String toString(){
+    private static class PurchaseInfo {
+        int quantity;
+        double unitPrice;
+
+        PurchaseInfo(int quantity, double unitPrice) {
+            this.quantity = quantity;
+            this.unitPrice = unitPrice;
+        }
+    }
+
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Receipt #").append(receiptNumber).append("\n");
-        sb.append("Cashier: ").append(cashier.getName()).append("\n");
-        sb.append("Date: ").append(timeStamp).append("\n");
-        sb.append("Items:\n" );
-        for(Map.Entry<Product, Integer> entry: purchasedProducts.entrySet()){
+        sb.append("Receipt #").append(receiptNumber).append('\n');
+        sb.append("Cashier: ").append(cashier.getName()).append('\n');
+        sb.append("Date: ").append(timeStamp).append('\n');
+        sb.append("Items:\n");
+
+        for (Map.Entry<Product, PurchaseInfo> entry : purchasedProducts.entrySet()) {
+            Product product = entry.getKey();
+            PurchaseInfo info = entry.getValue();
+            double lineTotal = info.unitPrice * info.quantity;
+
             sb.append(" - ")
-                    .append(entry.getKey().name)
-                    .append(" x ")
-                    .append(entry.getValue())
-                    .append("\n");
-        };
-        sb.append("Total: ").append(getTotal()).append(" BGN\n");
+                    .append(product.getName())
+                    .append(" x ").append(info.quantity)
+                    .append(" @ ").append(String.format("%.2f", info.unitPrice)).append(" BGN")
+                    .append(" = ").append(String.format("%.2f", lineTotal)).append(" BGN\n");
+        }
+
+        sb.append("Total: ").append(String.format("%.2f", total)).append(" BGN\n");
         return sb.toString();
     }
+
 }
