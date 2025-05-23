@@ -3,7 +3,7 @@ import org.alexanderpetrovF113655.store.model.Receipt;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-public class ReceiptFileManager {
+public class ReceiptFileManager implements Serializable{
     private static final String TEXT_FOLDER = "receipts/";
     private static final String SERIAL_FOLDER = "receipts_serial/";
 

@@ -45,7 +45,7 @@ public class Receipt implements  Serializable{
         return Math.round(total*100.0)/ 100.0;
     }
 
-    private static class PurchaseInfo {
+    private static class PurchaseInfo implements Serializable {
         int quantity;
         double unitPrice;
 
