@@ -1,6 +1,6 @@
 Receipt #1
 Cashier: Peter
-Date: 2025-05-23T19:45:52.461843700
+Date: 2025-05-23T20:21:02.819970500
 Items:
  - Pasta x 2 @ 1.56 BGN = 3.12 BGN
  - Soap x 3 @ 2.40 BGN = 7.20 BGN

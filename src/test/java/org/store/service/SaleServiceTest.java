@@ -31,7 +31,7 @@ public class SaleServiceTest {
         mockStore = mock(Store.class);
         saleService = new SaleService(mockStore);
 
-        testCashier = new Cashier(1, "Касиер Иван", 1000.0);
+        testCashier = new Cashier(1, "Cashier Maria", 1000.0);
 
 
         when(mockStore.getMarkupPercent(Category.FOOD)).thenReturn(30.0);
@@ -41,7 +41,7 @@ public class SaleServiceTest {
 
     @Test
     void testSuccessfulSale() throws Exception {
-        Product product = new FoodProduct(1, "Хляб", 1.0,
+        Product product = new FoodProduct(1, "Pasta", 1.0,
                 LocalDate.now().plusDays(3), 10);
 
         Map<Product, Integer> items = new HashMap<>();
@@ -50,7 +50,7 @@ public class SaleServiceTest {
         Receipt result = saleService.processSale(testCashier, items);
 
         assertNotNull(result);
-        assertEquals(2, result.getPurchasedProducts().get(product));
+        assertEquals(2, result.getPurchasedProducts().get(product).quantity);
         assertEquals(testCashier, result.getCashier());
 
 
@@ -59,7 +59,7 @@ public class SaleServiceTest {
 
     @Test
     void testInsufficientQuantityThrowsException() {
-        Product product = new FoodProduct(2, "Мляко", 1.0,
+        Product product = new FoodProduct(2, "Milk", 1.0,
                 LocalDate.now().plusDays(5), 1);
 
         Map<Product, Integer> items = new HashMap<>();
